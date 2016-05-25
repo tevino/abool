@@ -1,3 +1,5 @@
+// Package abool provides an atomic boolean type for cleaner code and
+// better performance.
 package abool
 
 import "sync/atomic"

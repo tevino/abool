@@ -3,6 +3,8 @@
 
 :bulb: Atomic boolean library for Golang, optimized for performance yet simple to use.
 
+Use this for cleaner code.
+
 ## Usage
 
 ```go
