@@ -4,9 +4,18 @@ package abool
 
 import "sync/atomic"
 
-// New creates a pointer to an AtomicBool
+// New creates an AtomicBool with default to false
 func New() *AtomicBool {
 	return new(AtomicBool)
+}
+
+// NewBool creates an AtomicBool with given default value
+func NewBool(ok bool) *AtomicBool {
+	ab := New()
+	if ok {
+		ab.Set()
+	}
+	return ab
 }
 
 // AtomicBool is a atomic boolean

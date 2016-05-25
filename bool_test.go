@@ -7,7 +7,17 @@ import (
 )
 
 func TestBool(t *testing.T) {
-	v := New()
+	v := NewBool(true)
+	if !v.IsSet() {
+		t.Fatal("NewValue(true) failed")
+	}
+
+	v = NewBool(false)
+	if v.IsSet() {
+		t.Fatal("NewValue(false) failed")
+	}
+
+	v = New()
 	if v.IsSet() {
 		t.Fatal("Empty value of AtomicBool should be false")
 	}
@@ -38,6 +48,8 @@ func TestRace(t *testing.T) {
 	var wg sync.WaitGroup
 	wg.Add(repeat * 3)
 	v := New()
+
+	// Writer
 	go func() {
 		for i := 0; i < repeat; i++ {
 			v.Set()
@@ -45,6 +57,7 @@ func TestRace(t *testing.T) {
 		}
 	}()
 
+	// Reader
 	go func() {
 		for i := 0; i < repeat; i++ {
 			v.IsSet()
@@ -52,6 +65,7 @@ func TestRace(t *testing.T) {
 		}
 	}()
 
+	// Writer
 	go func() {
 		for i := 0; i < repeat; i++ {
 			v.UnSet()
