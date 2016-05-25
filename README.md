@@ -1,4 +1,6 @@
 # ABool
+[![GoDoc](https://godoc.org/github.com/tevino/abool?status.svg)](https://godoc.org/github.com/tevino/abool)
+
 :bulb: Atomic boolean library for Golang, optimized for performance yet simple to use.
 
 ## Usage
