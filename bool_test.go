@@ -33,6 +33,14 @@ func TestBool(t *testing.T) {
 	}
 }
 
+func ExampleAtomicBool() {
+	cond := New()    // default to false
+	cond.Set()       // set to true
+	cond.IsSet()     // returns true
+	cond.UnSet()     // set to false
+	cond.SetTo(true) // set to whatever you want
+}
+
 // Benchmark Read
 
 func BenchmarkMutexRead(b *testing.B) {
