@@ -33,6 +33,34 @@ func TestBool(t *testing.T) {
 	}
 }
 
+func TestRace(t *testing.T) {
+	repeat := 10000
+	var wg sync.WaitGroup
+	wg.Add(repeat * 3)
+	v := New()
+	go func() {
+		for i := 0; i < repeat; i++ {
+			v.Set()
+			wg.Done()
+		}
+	}()
+
+	go func() {
+		for i := 0; i < repeat; i++ {
+			v.IsSet()
+			wg.Done()
+		}
+	}()
+
+	go func() {
+		for i := 0; i < repeat; i++ {
+			v.UnSet()
+			wg.Done()
+		}
+	}()
+	wg.Wait()
+}
+
 func ExampleAtomicBool() {
 	cond := New()    // default to false
 	cond.Set()       // set to true

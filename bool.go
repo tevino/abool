@@ -14,15 +14,6 @@ func New() *AtomicBool {
 // *AtomicBool to avoid copy
 type AtomicBool int32
 
-// SetTo sets the boolean with given bool
-func (ab *AtomicBool) SetTo(yes bool) {
-	if yes {
-		atomic.StoreInt32((*int32)(ab), 1)
-	} else {
-		atomic.StoreInt32((*int32)(ab), 0)
-	}
-}
-
 // Set sets the bool to true
 func (ab *AtomicBool) Set() {
 	atomic.StoreInt32((*int32)(ab), 1)
@@ -36,4 +27,13 @@ func (ab *AtomicBool) UnSet() {
 // IsSet returns whether the bool is true
 func (ab *AtomicBool) IsSet() bool {
 	return atomic.LoadInt32((*int32)(ab)) == 1
+}
+
+// SetTo sets the boolean with given bool
+func (ab *AtomicBool) SetTo(yes bool) {
+	if yes {
+		atomic.StoreInt32((*int32)(ab), 1)
+	} else {
+		atomic.StoreInt32((*int32)(ab), 0)
+	}
 }
