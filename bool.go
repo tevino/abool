@@ -1,4 +1,4 @@
-// Package abool provides an atomic boolean type for cleaner code and
+// Package abool provides atomic Boolean type for cleaner code and
 // better performance.
 package abool
 
