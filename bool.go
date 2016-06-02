@@ -46,3 +46,16 @@ func (ab *AtomicBool) SetTo(yes bool) {
 		atomic.StoreInt32((*int32)(ab), 0)
 	}
 }
+
+// SetToIf sets the Boolean to new only if the Boolean matches the old
+// Returns whether the set was done
+func (ab *AtomicBool) SetToIf(old, new bool) (set bool) {
+	var o, n int32
+	if old {
+		o = 1
+	}
+	if new {
+		n = 1
+	}
+	return atomic.CompareAndSwapInt32((*int32)(ab), o, n)
+}

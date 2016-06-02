@@ -41,6 +41,14 @@ func TestBool(t *testing.T) {
 	if v.IsSet() {
 		t.Fatal("AtomicBool.SetTo(false) failed")
 	}
+
+	if set := v.SetToIf(true, false); set || v.IsSet() {
+		t.Fatal("AtomicBool.SetTo(true, false) failed")
+	}
+
+	if set := v.SetToIf(false, true); !set || !v.IsSet() {
+		t.Fatal("AtomicBool.SetTo(false, true) failed")
+	}
 }
 
 func TestRace(t *testing.T) {
@@ -140,5 +148,29 @@ func BenchmarkAtomicBoolWrite(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		v.Set()
+	}
+}
+
+// Benchmark CAS
+
+func BenchmarkMutexCAS(b *testing.B) {
+	var m sync.RWMutex
+	var v bool
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		m.Lock()
+		if !v {
+			v = true
+		}
+		m.Unlock()
+	}
+	b.StopTimer()
+}
+
+func BenchmarkAtomicBoolCAS(b *testing.B) {
+	v := New()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		v.SetToIf(false, true)
 	}
 }
