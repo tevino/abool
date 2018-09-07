@@ -18,6 +18,7 @@ cond.IsSet()               // Returns true
 cond.UnSet()               // Set to false
 cond.SetTo(true)           // Set to whatever you want
 cond.SetToIf(false, true)  // Set to true if it is false, returns false(not set)
+cond.Flip()                // Flip the boolean value, true to false, or false to ture
 
 
 // embedding
@@ -45,5 +46,9 @@ BenchmarkAtomicBoolWrite-4 	200000000	         9.87 ns/op  # <--- This package
 # CAS
 BenchmarkMutexCAS-4        	 30000000	        44.9 ns/op
 BenchmarkAtomicBoolCAS-4   	100000000	        11.7 ns/op   # <--- This package
+
+# Flip
+BenchmarkMutexFlip-4            50000000           29.7 ns/op
+BenchmarkAtomicBoolFlip-4      200000000           8.65 ns/op   # <--- This package
 ```
 
