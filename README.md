@@ -18,7 +18,7 @@ cond.IsSet()               // Returns true
 cond.UnSet()               // Set to false
 cond.SetTo(true)           // Set to whatever you want
 cond.SetToIf(false, true)  // Set to true if it is false, returns false(not set)
-cond.Flip()                // Flip the boolean value, true to false, or false to ture
+cond.Flip()                // Flip toggles the value(replaces with its opposite value)
 
 
 // embedding
