@@ -51,7 +51,11 @@ func (ab *AtomicBool) SetTo(yes bool) {
 
 // Flip toggles the Boolean (replaces with its opposite value).
 func (ab *AtomicBool) Flip() {
-	atomic.StoreInt32((*int32)(ab), atomic.LoadInt32((*int32)(ab))^1)
+	var o, n int32
+	o, n = 0, 1
+	if !atomic.CompareAndSwapInt32((*int32)(ab), o, n) {
+		atomic.CompareAndSwapInt32((*int32)(ab), n, o)
+	}
 }
 
 // SetToIf sets the Boolean to new only if the Boolean matches the old
