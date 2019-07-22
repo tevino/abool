@@ -50,9 +50,9 @@ func TestBool(t *testing.T) {
 		t.Fatal("AtomicBool.SetTo(false, true) failed")
 	}
 
-	v.Flip() // expected false
+	_ = v.Toggle() // expected false
 	if v.IsSet() {
-		t.Fatal("AtomicBool.Flip() failed")
+		t.Fatal("AtomicBool.Toggle() failed")
 	}
 
 }
@@ -90,7 +90,7 @@ func TestRace(t *testing.T) {
 	// Reader And Writer
 	go func() {
 		for i := 0; i < repeat; i++ {
-			v.Flip()
+			v.Toggle()
 			wg.Done()
 		}
 	}()
@@ -104,7 +104,7 @@ func ExampleAtomicBool() {
 	cond.IsSet()     // returns true
 	cond.UnSet()     // set to false
 	cond.SetTo(true) // set to whatever you want
-	cond.Flip()      // flips the boolean value
+	cond.Toggle()    // toggles the boolean value
 }
 
 // Benchmark Read
@@ -191,9 +191,9 @@ func BenchmarkAtomicBoolCAS(b *testing.B) {
 	}
 }
 
-// Benchmark flip boolean value
+// Benchmark toggle boolean value
 
-func BenchmarkMutexFlip(b *testing.B) {
+func BenchmarkMutexToggle(b *testing.B) {
 	var m sync.RWMutex
 	var v bool
 	b.ResetTimer()
@@ -205,10 +205,10 @@ func BenchmarkMutexFlip(b *testing.B) {
 	b.StopTimer()
 }
 
-func BenchmarkAtomicBoolFlip(b *testing.B) {
+func BenchmarkAtomicBoolToggle(b *testing.B) {
 	v := New()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		v.Flip()
+		v.Toggle()
 	}
 }
