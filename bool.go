@@ -40,7 +40,7 @@ func (ab *AtomicBool) IsSet() bool {
 	return atomic.LoadInt32((*int32)(ab)) == 1
 }
 
-// SetTo sets the Boolean with given Boolean.
+// SetTo sets the boolean with given Boolean.
 func (ab *AtomicBool) SetTo(yes bool) {
 	if yes {
 		atomic.StoreInt32((*int32)(ab), 1)
