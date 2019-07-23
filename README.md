@@ -18,7 +18,7 @@ cond.IsSet()               // Returns true
 cond.UnSet()               // Set to false
 cond.SetTo(true)           // Set to whatever you want
 cond.SetToIf(false, true)  // Set to true if it is false, returns false(not set)
-cond.Toggle() bool         // Toggle the boolean value atomically and returns the previous value.
+cond.Toggle() *AtomicBool  // Negates boolean atomically and returns a new AtomicBool object which holds previous boolean value.
 
 
 // embedding

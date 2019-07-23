@@ -50,11 +50,20 @@ func TestBool(t *testing.T) {
 		t.Fatal("AtomicBool.SetTo(false, true) failed")
 	}
 
-	_ = v.Toggle() // expected false
+	v = New()
 	if v.IsSet() {
-		t.Fatal("AtomicBool.Toggle() failed")
+		t.Fatal("Empty value of AtomicBool should be false")
 	}
 
+	_ = v.Toggle()
+	if !v.IsSet() {
+		t.Fatal("AtomicBool.Toggle() to true failed")
+	}
+
+	prev := v.Toggle()
+	if v.IsSet() == prev.IsSet() {
+		t.Fatal("AtomicBool.Toggle() to false failed")
+	}
 }
 
 func TestRace(t *testing.T) {
