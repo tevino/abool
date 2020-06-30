@@ -1,6 +1,7 @@
 package abool
 
 import (
+	"math"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -63,6 +64,57 @@ func TestBool(t *testing.T) {
 	prev := v.Toggle()
 	if v.IsSet() == prev.IsSet() {
 		t.Fatal("AtomicBool.Toggle() to false failed")
+	}
+}
+
+func TestToogleMultipleTimes(t *testing.T) {
+	t.Parallel()
+
+	v := New()
+	pre := NewBool(!v.IsSet())
+	for i := 0; i < 100; i++ {
+		v.SetTo(false)
+		for j := 0; j < i; j++ {
+			pre = v.Toggle()
+		}
+
+		expected := i%2 != 0
+		if v.IsSet() != expected {
+			t.Fatalf("AtomicBool.Toogle() doesn't work after %d calls, expected: %v, got %v", i, expected, v.IsSet())
+		}
+
+		if pre.IsSet() == v.IsSet() {
+			t.Fatalf("AtomicBool.Toogle() returned wrong value at the %dth calls, expected: %v, got %v", i, !v.IsSet(), pre.IsSet())
+		}
+	}
+}
+
+func TestToogleAfterOverflow(t *testing.T) {
+	t.Parallel()
+
+	var value int32 = math.MaxInt32
+	v := (*AtomicBool)(&value)
+
+	valueBeforeToggle := *(*int32)(v)
+
+	// test first toggle after overflow
+	v.Toggle()
+	expected := math.MaxInt32%2 == 0
+	if v.IsSet() != expected {
+		t.Fatalf("AtomicBool.Toogle() doesn't work after overflow, expected: %v, got %v", expected, v.IsSet())
+	}
+
+	// make sure overflow happened
+	var valueAfterToggle int32 = *(*int32)(v)
+	if valueAfterToggle >= valueBeforeToggle {
+		t.Fatalf("Overflow does not happen as expected, before %d, after: %d", valueBeforeToggle, valueAfterToggle)
+	}
+
+	// test second toggle after overflow
+	v.Toggle()
+	expected = !expected
+	if v.IsSet() != expected {
+		t.Fatalf("AtomicBool.Toogle() doesn't work after the second call after overflow, expected: %v, got %v", expected, v.IsSet())
 	}
 }
 
