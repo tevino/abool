@@ -37,7 +37,7 @@ func (ab *AtomicBool) UnSet() {
 
 // IsSet returns whether the Boolean is true
 func (ab *AtomicBool) IsSet() bool {
-	return atomic.LoadInt32((*int32)(ab)) == 1
+	return atomic.LoadInt32((*int32)(ab))&1 == 1
 }
 
 // SetTo sets the boolean with given Boolean.
