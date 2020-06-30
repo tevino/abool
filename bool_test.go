@@ -8,6 +8,8 @@ import (
 )
 
 func TestBool(t *testing.T) {
+	t.Parallel()
+
 	v := NewBool(true)
 	if !v.IsSet() {
 		t.Fatal("NewValue(true) failed")
@@ -119,6 +121,8 @@ func TestToogleAfterOverflow(t *testing.T) {
 }
 
 func TestRace(t *testing.T) {
+	t.Parallel()
+
 	repeat := 10000
 	var wg sync.WaitGroup
 	wg.Add(repeat * 4)
