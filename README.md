@@ -18,6 +18,7 @@ cond.IsSet()               // Returns true
 cond.UnSet()               // Set to false
 cond.SetTo(true)           // Set to whatever you want
 cond.SetToIf(false, true)  // Set to true if it is false, returns false(not set)
+cond.Toggle() *AtomicBool  // Negates boolean atomically and returns a new AtomicBool object which holds previous boolean value.
 
 
 // embedding
@@ -26,24 +27,32 @@ type Foo struct {
 }
 ```
 
-## Benchmark:
+## Benchmark
 
-- Go 1.6.2
-- OS X 10.11.4
+- Go 1.11.5
+- OS X 10.14.5
 
 ```shell
 # Read
-BenchmarkMutexRead-4       	100000000	        21.0 ns/op
-BenchmarkAtomicValueRead-4 	200000000	         6.30 ns/op
-BenchmarkAtomicBoolRead-4  	300000000	         4.21 ns/op  # <--- This package
+BenchmarkMutexRead-4            100000000               14.7 ns/op
+BenchmarkAtomicValueRead-4      2000000000               0.45 ns/op
+BenchmarkAtomicBoolRead-4       2000000000               0.35 ns/op  # <--- This package
 
 # Write
-BenchmarkMutexWrite-4      	100000000	        21.6 ns/op
-BenchmarkAtomicValueWrite-4	 30000000	        43.4 ns/op
-BenchmarkAtomicBoolWrite-4 	200000000	         9.87 ns/op  # <--- This package
+BenchmarkMutexWrite-4           100000000               14.5 ns/op
+BenchmarkAtomicValueWrite-4     100000000               10.5 ns/op
+BenchmarkAtomicBoolWrite-4      300000000                5.21 ns/op  # <--- This package
 
 # CAS
-BenchmarkMutexCAS-4        	 30000000	        44.9 ns/op
-BenchmarkAtomicBoolCAS-4   	100000000	        11.7 ns/op   # <--- This package
+BenchmarkMutexCAS-4             50000000                31.3 ns/op
+BenchmarkAtomicBoolCAS-4        200000000                7.18 ns/op  # <--- This package
+
+# Toggle
+BenchmarkMutexToggle-4          50000000                32.6 ns/op
+BenchmarkAtomicBoolToggle-4     300000000                5.21 ns/op  # <--- This package
 ```
 
+## Thanks to these Contributors
+
+- [@barryz](https://github.com/barryz)
+    - Added the `Toggle` method
