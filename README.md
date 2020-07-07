@@ -27,7 +27,7 @@ type Foo struct {
 }
 ```
 
-## Benchmark:
+## Benchmark
 
 - Go 1.11.5
 - OS X 10.14.5
