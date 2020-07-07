@@ -49,9 +49,9 @@ func (ab *AtomicBool) SetTo(yes bool) {
 	}
 }
 
-// Toggle negates boolean atomically and returns a new AtomicBool object which holds previous boolean value.
-func (ab *AtomicBool) Toggle() *AtomicBool {
-	return NewBool(atomic.AddInt32((*int32)(ab), 1)&1 == 0)
+// Toggle inverts the boolean then returns the value before inverting.
+func (ab *AtomicBool) Toggle() bool {
+	return atomic.AddInt32((*int32)(ab), 1)&1 == 0
 }
 
 // SetToIf sets the Boolean to new only if the Boolean matches the old
