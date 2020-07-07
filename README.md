@@ -51,3 +51,8 @@ BenchmarkAtomicBoolCAS-4        200000000                7.18 ns/op  # <--- This
 BenchmarkMutexToggle-4          50000000                32.6 ns/op
 BenchmarkAtomicBoolToggle-4     300000000                5.21 ns/op  # <--- This package
 ```
+
+## Thanks to these Contributors
+
+- [@barryz](https://github.com/barryz)
+    - Added the `Toggle` method
