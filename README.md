@@ -1,4 +1,5 @@
 # ABool :bulb:
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/tevino/abool)](https://goreportcard.com/report/github.com/tevino/abool)
 [![GoDoc](https://godoc.org/github.com/tevino/abool?status.svg)](https://godoc.org/github.com/tevino/abool)
 
@@ -52,7 +53,7 @@ BenchmarkMutexToggle-4          50000000                32.6 ns/op
 BenchmarkAtomicBoolToggle-4     300000000                5.21 ns/op  # <--- This package
 ```
 
-## Thanks to these Contributors
+## Special thanks to contributors
 
 - [@barryz](https://github.com/barryz)
-    - Added the `Toggle` method
+  - Added the `Toggle` method
