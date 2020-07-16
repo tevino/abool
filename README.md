@@ -12,14 +12,14 @@ Use this for cleaner code.
 ```go
 import "github.com/tevino/abool"
 
-cond := abool.New()  // default to false
+cond := abool.New()     // default to false
 
-cond.Set()                 // Set to true
-cond.IsSet()               // Returns true
-cond.UnSet()               // Set to false
-cond.SetTo(true)           // Set to whatever you want
-cond.SetToIf(false, true)  // Set to true if it is false, returns false(not set)
-cond.Toggle() *AtomicBool  // Negates boolean atomically and returns a new AtomicBool object which holds previous boolean value.
+cond.Set()              // Set to true
+cond.IsSet()            // Returns true
+cond.UnSet()            // Set to false
+cond.SetTo(any)         // Set to whatever you want
+cond.SetToIf(new, old)  // Sets to `new` only if the Boolean matches the `old`, returns whether succeeded
+cond.Toggle()           // Inverts the boolean then returns the value before inverting
 
 
 // embedding
