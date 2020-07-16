@@ -25,6 +25,10 @@ func TestBool(t *testing.T) {
 		t.Fatal("Empty value of AtomicBool should be false")
 	}
 
+	if v.IsSet() == v.IsNotSet() {
+		t.Fatal("AtomicBool.IsNotSet() should be the opposite of IsSet()")
+	}
+
 	v.Set()
 	if !v.IsSet() {
 		t.Fatal("AtomicBool.Set() failed")
@@ -164,12 +168,18 @@ func TestRace(t *testing.T) {
 }
 
 func ExampleAtomicBool() {
-	cond := New()    // default to false
-	cond.Set()       // set to true
-	cond.IsSet()     // returns true
-	cond.UnSet()     // set to false
-	cond.SetTo(true) // set to whatever you want
-	cond.Toggle()    // toggles the boolean value
+	cond := New() // default to false
+	any := true
+	old := any
+	new := !any
+
+	cond.Set()             // Sets to true
+	cond.IsSet()           // Returns true
+	cond.UnSet()           // Sets to false
+	cond.IsNotSet()        // Returns true
+	cond.SetTo(any)        // Sets to whatever you want
+	cond.SetToIf(new, old) // Sets to `new` only if the Boolean matches the `old`, returns whether succeeded
+	cond.Toggle()          // Inverts the boolean then returns the value before inverting
 }
 
 // Benchmark Read

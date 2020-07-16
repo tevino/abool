@@ -38,6 +38,11 @@ func (ab *AtomicBool) IsSet() bool {
 	return atomic.LoadInt32((*int32)(ab))&1 == 1
 }
 
+// IsNotSet returns whether the Boolean is false.
+func (ab *AtomicBool) IsNotSet() bool {
+	return !ab.IsSet()
+}
+
 // SetTo sets the boolean with given Boolean.
 func (ab *AtomicBool) SetTo(yes bool) {
 	if yes {

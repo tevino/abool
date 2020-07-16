@@ -17,6 +17,7 @@ cond := abool.New()     // default to false
 cond.Set()              // Sets to true
 cond.IsSet()            // Returns true
 cond.UnSet()            // Sets to false
+cond.IsNotSet()         // Returns true
 cond.SetTo(any)         // Sets to whatever you want
 cond.SetToIf(new, old)  // Sets to `new` only if the Boolean matches the `old`, returns whether succeeded
 cond.Toggle()           // Inverts the boolean then returns the value before inverting
