@@ -14,10 +14,10 @@ import "github.com/tevino/abool"
 
 cond := abool.New()     // default to false
 
-cond.Set()              // Set to true
+cond.Set()              // Sets to true
 cond.IsSet()            // Returns true
-cond.UnSet()            // Set to false
-cond.SetTo(any)         // Set to whatever you want
+cond.UnSet()            // Sets to false
+cond.SetTo(any)         // Sets to whatever you want
 cond.SetToIf(new, old)  // Sets to `new` only if the Boolean matches the `old`, returns whether succeeded
 cond.Toggle()           // Inverts the boolean then returns the value before inverting
 
