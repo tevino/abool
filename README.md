@@ -3,9 +3,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/tevino/abool)](https://goreportcard.com/report/github.com/tevino/abool)
 [![GoDoc](https://godoc.org/github.com/tevino/abool?status.svg)](https://godoc.org/github.com/tevino/abool)
 
-Atomic Boolean library for Go, optimized for performance yet simple to use.
+Atomic Boolean package for Go, optimized for performance yet simple to use.
 
-Use this for cleaner code.
+Designed for cleaner code.
 
 ## Usage
 
