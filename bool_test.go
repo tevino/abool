@@ -269,7 +269,6 @@ func BenchmarkMutexCAS(b *testing.B) {
 		}
 		m.Unlock()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkAtomicBoolCAS(b *testing.B) {
@@ -280,7 +279,7 @@ func BenchmarkAtomicBoolCAS(b *testing.B) {
 	}
 }
 
-// Benchmark toggle boolean value
+// Benchmark toggle
 
 func BenchmarkMutexToggle(b *testing.B) {
 	var m sync.RWMutex
@@ -291,7 +290,6 @@ func BenchmarkMutexToggle(b *testing.B) {
 		v = !v
 		m.Unlock()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkAtomicBoolToggle(b *testing.B) {
