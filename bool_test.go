@@ -7,27 +7,36 @@ import (
 	"testing"
 )
 
-func TestBool(t *testing.T) {
+func TestDefaultValue(t *testing.T) {
 	t.Parallel()
-
-	v := NewBool(true)
-	if !v.IsSet() {
-		t.Fatal("NewValue(true) failed")
-	}
-
-	v = NewBool(false)
-	if v.IsSet() {
-		t.Fatal("NewValue(false) failed")
-	}
-
-	v = New()
+	v := New()
 	if v.IsSet() {
 		t.Fatal("Empty value of AtomicBool should be false")
 	}
 
+	v = NewBool(true)
+	if !v.IsSet() {
+		t.Fatal("NewValue(true) should be true")
+	}
+
+	v = NewBool(false)
+	if v.IsSet() {
+		t.Fatal("NewValue(false) should be false")
+	}
+}
+
+func TestIsNotSet(t *testing.T) {
+	t.Parallel()
+	v := New()
+
 	if v.IsSet() == v.IsNotSet() {
 		t.Fatal("AtomicBool.IsNotSet() should be the opposite of IsSet()")
 	}
+}
+
+func TestSetUnSet(t *testing.T) {
+	t.Parallel()
+	v := New()
 
 	v.Set()
 	if !v.IsSet() {
@@ -38,6 +47,11 @@ func TestBool(t *testing.T) {
 	if v.IsSet() {
 		t.Fatal("AtomicBool.UnSet() failed")
 	}
+}
+
+func TestSetTo(t *testing.T) {
+	t.Parallel()
+	v := New()
 
 	v.SetTo(true)
 	if !v.IsSet() {
@@ -56,11 +70,11 @@ func TestBool(t *testing.T) {
 	if set := v.SetToIf(false, true); !set || !v.IsSet() {
 		t.Fatal("AtomicBool.SetTo(false, true) failed")
 	}
+}
 
-	v = New()
-	if v.IsSet() {
-		t.Fatal("Empty value of AtomicBool should be false")
-	}
+func TestToggle(t *testing.T) {
+	t.Parallel()
+	v := New()
 
 	_ = v.Toggle()
 	if !v.IsSet() {
