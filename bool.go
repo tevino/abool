@@ -2,7 +2,12 @@
 // better performance.
 package abool
 
-import "sync/atomic"
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"sync/atomic"
+)
 
 // New creates an AtomicBool with default set to false.
 func New() *AtomicBool {
@@ -68,4 +73,25 @@ func (ab *AtomicBool) SetToIf(old, new bool) (set bool) {
 		n = 1
 	}
 	return atomic.CompareAndSwapInt32((*int32)(ab), o, n)
+}
+
+// Marshal an AtomicBool into JSON like a normal bool
+func (ab *AtomicBool) MarshalJSON() ([]byte, error) {
+	return json.Marshal(ab.IsSet())
+}
+
+// Unmarshall normal bool's into AtomicBool
+func (ab *AtomicBool) UnmarshalJSON(b []byte) error {
+	var v interface{}
+	if err := json.Unmarshal(b, &v); err != nil {
+		return err
+	}
+
+	switch value := v.(type) {
+	case bool:
+		ab.SetTo(value)
+		return nil
+	default:
+		return errors.New(fmt.Sprintf("%s is an invalid JSON representation for an AtomicBool\n", b))
+	}
 }
