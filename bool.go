@@ -4,8 +4,6 @@ package abool
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"sync/atomic"
 )
 
@@ -82,16 +80,11 @@ func (ab *AtomicBool) MarshalJSON() ([]byte, error) {
 
 // Unmarshall normal bool's into AtomicBool
 func (ab *AtomicBool) UnmarshalJSON(b []byte) error {
-	var v interface{}
+	var v bool
 	if err := json.Unmarshal(b, &v); err != nil {
 		return err
 	}
 
-	switch value := v.(type) {
-	case bool:
-		ab.SetTo(value)
-		return nil
-	default:
-		return errors.New(fmt.Sprintf("%s is an invalid JSON representation for an AtomicBool\n", b))
-	}
+    ab.SetTo(v)
+    return nil
 }
