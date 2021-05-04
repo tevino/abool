@@ -85,6 +85,6 @@ func (ab *AtomicBool) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-    ab.SetTo(v)
-    return nil
+	ab.SetTo(v)
+	return nil
 }
