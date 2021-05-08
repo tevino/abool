@@ -182,49 +182,35 @@ func TestRace(t *testing.T) {
 	wg.Wait()
 }
 
-func TestFalseUnmarshall(t *testing.T) {
-	// Marshall a normal bool into JSON byte slice
-	b, err := json.Marshal(false)
-	if err != nil {
-		t.Error(err)
+func TestJSONUnmarshall(t *testing.T) {
+	// Table of cases
+	cases := []struct {
+		boolean bool
+		abool   *AtomicBool
+	}{
+		{true, NewBool(true)},
+		{false, NewBool(false)},
 	}
 
-	// Create an AtomicBool
-	v := New()
+	for _, c := range cases {
+		b, err := json.Marshal(c.boolean)
+		if err != nil {
+			t.Error(err)
+		}
 
-	// Try to unmarshall the JSON byte slice of a
-	// a normal bool into an AtomicBool
-	err = v.UnmarshalJSON(b)
-	if err != nil {
-		t.Error(err)
-	}
+		// Create an AtomicBool
+		v := New()
 
-	// Check if our AtomicBool is set to false
-	if v.IsSet() == true {
-		t.Errorf("Expected AtomicBool to represent false but IsSet() returns true")
-	}
-}
+		// Try to unmarshall the JSON byte slice
+		// of a normal boolean into an AtomicBool
+		err = v.UnmarshalJSON(b)
+		if err != nil {
+			t.Error(err)
+		}
 
-func TestTrueUnmarshall(t *testing.T) {
-	// Marshall a normal bool into JSON byte slice
-	b, err := json.Marshal(true)
-	if err != nil {
-		t.Error(err)
-	}
-
-	// Create an AtomicBool
-	v := New()
-
-	// Try to unmarshall the JSON byte slice of a
-	// a normal bool into an AtomicBool
-	err = v.UnmarshalJSON(b)
-	if err != nil {
-		t.Error(err)
-	}
-
-	// Check if our AtomicBool is set to false
-	if v.IsSet() == false {
-		t.Errorf("Expected AtomicBool to represent true but IsSet() returns false. %+v", v)
+		if v.IsSet() != c.abool.IsSet() {
+			t.Errorf("Expected AtomicBool to represent %t but actual value was %t", c.abool.IsSet(), v.IsSet())
+		}
 	}
 }
 
