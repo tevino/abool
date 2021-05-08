@@ -182,7 +182,7 @@ func TestRace(t *testing.T) {
 	wg.Wait()
 }
 
-func TestJSONUnmarshall(t *testing.T) {
+func TestJSONUnmarshal(t *testing.T) {
 	// Table of cases
 	cases := []struct {
 		boolean bool

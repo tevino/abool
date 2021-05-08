@@ -62,3 +62,5 @@ BenchmarkAtomicBoolToggle-4   	169871972	         7.02 ns/op  # <--- This packag
 
 - [@barryz](https://github.com/barryz)
   - Added the `Toggle` method
+- [@LucasRouckhout](https://github.com/LucasRouckhout)
+  - Implemented JSON Unmarshal and Marshal interface
