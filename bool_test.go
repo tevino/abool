@@ -182,34 +182,65 @@ func TestRace(t *testing.T) {
 	wg.Wait()
 }
 
-func TestJSONUnmarshal(t *testing.T) {
-	// Table of cases
-	cases := []struct {
-		boolean bool
-		abool   *AtomicBool
-	}{
-		{true, NewBool(true)},
-		{false, NewBool(false)},
-	}
+func TestJSONCompatibleWithBuiltinBool(t *testing.T) {
+	for _, value := range []bool{true, false} {
+		// Test bool -> bytes -> AtomicBool
 
-	for _, c := range cases {
-		b, err := json.Marshal(c.boolean)
+		// act 1. bool -> bytes
+		buf, err := json.Marshal(value)
 		if err != nil {
-			t.Error(err)
+			t.Fatalf("json.Marshal(%t) failed: %s", value, err)
 		}
 
-		// Create an AtomicBool
-		v := New()
-
+		// act 2. bytes -> AtomicBool
+		//
 		// Try to unmarshall the JSON byte slice
 		// of a normal boolean into an AtomicBool
-		err = v.UnmarshalJSON(b)
+		//
+		// Create an AtomicBool with the oppsite default to ensure the unmarshal process did the work
+		ab := NewBool(!value)
+		err = json.Unmarshal(buf, ab)
 		if err != nil {
-			t.Error(err)
+			t.Fatalf(`json.Unmarshal("%s", %T) failed: %s`, buf, ab, err)
+		}
+		// assert
+		if ab.IsSet() != value {
+			t.Fatalf("Expected AtomicBool to represent %t but actual value was %t", value, ab.IsSet())
 		}
 
-		if v.IsSet() != c.abool.IsSet() {
-			t.Errorf("Expected AtomicBool to represent %t but actual value was %t", c.abool.IsSet(), v.IsSet())
+		// Test AtomicBool -> bytes -> bool
+
+		// act 3. AtomicBool -> bytes
+		buf, err = json.Marshal(ab)
+		if err != nil {
+			t.Fatalf("json.Marshal(%T) failed: %s", ab, err)
+		}
+
+		// using the opposite value for the same reason as the former case
+		b := ab.IsNotSet()
+		// act 4. bytes -> bool
+		err = json.Unmarshal(buf, &b)
+		if err != nil {
+			t.Fatalf(`json.Unmarshal("%s", %T) failed: %s`, buf, &b, err)
+		}
+		// assert
+		if b != ab.IsSet() {
+			t.Fatalf(`json.Unmarshal("%s", %T) didn't work, expected %t, got %t`, buf, ab, ab.IsSet(), b)
+		}
+	}
+}
+
+func TestUnmarshalJSONErrorNoWrite(t *testing.T) {
+	for _, val := range []bool{true, false} {
+		ab := NewBool(val)
+		oldVal := ab.IsSet()
+		buf := []byte("invalid-json")
+		err := json.Unmarshal(buf, ab)
+		if err == nil {
+			t.Fatalf(`Error expected from json.Unmarshal("%s", %T)`, buf, ab)
+		}
+		if oldVal != ab.IsSet() {
+			t.Fatal("Failed json.Unmarshal modified the value of AtomicBool which is not expected")
 		}
 	}
 }
