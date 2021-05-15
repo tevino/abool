@@ -83,10 +83,10 @@ func (ab *AtomicBool) MarshalJSON() ([]byte, error) {
 // NOTE: There's no lock during the process, usually it shouldn't be called with other methods in parallel.
 func (ab *AtomicBool) UnmarshalJSON(b []byte) error {
 	var v bool
-	if err := json.Unmarshal(b, &v); err != nil {
-		return err
-	}
+	err := json.Unmarshal(b, &v)
 
-	ab.SetTo(v)
-	return nil
+	if err == nil {
+		ab.SetTo(v)
+	}
+	return err
 }
