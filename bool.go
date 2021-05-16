@@ -73,13 +73,13 @@ func (ab *AtomicBool) SetToIf(old, new bool) (set bool) {
 	return atomic.CompareAndSwapInt32((*int32)(ab), o, n)
 }
 
-// Marshall behaves the same as if the AtomicBool is a builtin.bool.
+// MarshalJSON behaves the same as if the AtomicBool is a builtin.bool.
 // NOTE: There's no lock during the process, usually it shouldn't be called with other methods in parallel.
 func (ab *AtomicBool) MarshalJSON() ([]byte, error) {
 	return json.Marshal(ab.IsSet())
 }
 
-// Unmarshall behaves the same as if the AtomicBool is a builtin.bool.
+// UnmarshalJSON behaves the same as if the AtomicBool is a builtin.bool.
 // NOTE: There's no lock during the process, usually it shouldn't be called with other methods in parallel.
 func (ab *AtomicBool) UnmarshalJSON(b []byte) error {
 	var v bool
