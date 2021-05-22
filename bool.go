@@ -2,7 +2,10 @@
 // better performance.
 package abool
 
-import "sync/atomic"
+import (
+	"encoding/json"
+	"sync/atomic"
+)
 
 // New creates an AtomicBool with default set to false.
 func New() *AtomicBool {
@@ -68,4 +71,22 @@ func (ab *AtomicBool) SetToIf(old, new bool) (set bool) {
 		n = 1
 	}
 	return atomic.CompareAndSwapInt32((*int32)(ab), o, n)
+}
+
+// MarshalJSON behaves the same as if the AtomicBool is a builtin.bool.
+// NOTE: There's no lock during the process, usually it shouldn't be called with other methods in parallel.
+func (ab *AtomicBool) MarshalJSON() ([]byte, error) {
+	return json.Marshal(ab.IsSet())
+}
+
+// UnmarshalJSON behaves the same as if the AtomicBool is a builtin.bool.
+// NOTE: There's no lock during the process, usually it shouldn't be called with other methods in parallel.
+func (ab *AtomicBool) UnmarshalJSON(b []byte) error {
+	var v bool
+	err := json.Unmarshal(b, &v)
+
+	if err == nil {
+		ab.SetTo(v)
+	}
+	return err
 }
