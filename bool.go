@@ -30,17 +30,17 @@ type AtomicBool struct {
 
 // Set sets the Boolean to true.
 func (ab *AtomicBool) Set() {
-	atomic.StoreInt32((*int32)(&ab.boolean), 1)
+	atomic.StoreInt32(&ab.boolean, 1)
 }
 
 // UnSet sets the Boolean to false.
 func (ab *AtomicBool) UnSet() {
-	atomic.StoreInt32((*int32)(&ab.boolean), 0)
+	atomic.StoreInt32(&ab.boolean, 0)
 }
 
 // IsSet returns whether the Boolean is true.
 func (ab *AtomicBool) IsSet() bool {
-	return atomic.LoadInt32((*int32)(&ab.boolean))&1 == 1
+	return atomic.LoadInt32(&ab.boolean)&1 == 1
 }
 
 // IsNotSet returns whether the Boolean is false.
@@ -51,9 +51,9 @@ func (ab *AtomicBool) IsNotSet() bool {
 // SetTo sets the boolean with given Boolean.
 func (ab *AtomicBool) SetTo(yes bool) {
 	if yes {
-		atomic.StoreInt32((*int32)(&ab.boolean), 1)
+		atomic.StoreInt32(&ab.boolean, 1)
 	} else {
-		atomic.StoreInt32((*int32)(&ab.boolean), 0)
+		atomic.StoreInt32(&ab.boolean, 0)
 	}
 }
 
@@ -79,7 +79,7 @@ func (ab *AtomicBool) SetToIf(old, new bool) (set bool) {
 	if new {
 		n = 1
 	}
-	return atomic.CompareAndSwapInt32((*int32)(&ab.boolean), o, n)
+	return atomic.CompareAndSwapInt32(&ab.boolean, o, n)
 }
 
 // MarshalJSON behaves the same as if the AtomicBool is a builtin.bool.
