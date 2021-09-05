@@ -38,7 +38,7 @@ func (ab *AtomicBool) UnSet() {
 
 // IsSet returns whether the Boolean is true.
 func (ab *AtomicBool) IsSet() bool {
-	return atomic.LoadInt32((*int32)(ab))&1 == 1
+	return atomic.LoadInt32((*int32)(ab)) == 1
 }
 
 // IsNotSet returns whether the Boolean is false.
@@ -53,11 +53,6 @@ func (ab *AtomicBool) SetTo(yes bool) {
 	} else {
 		atomic.StoreInt32((*int32)(ab), 0)
 	}
-}
-
-// Toggle inverts the Boolean then returns the value before inverting.
-func (ab *AtomicBool) Toggle() bool {
-	return atomic.AddInt32((*int32)(ab), 1)&1 == 0
 }
 
 // SetToIf sets the Boolean to new only if the Boolean matches the old.
