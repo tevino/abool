@@ -58,8 +58,15 @@ func (ab *AtomicBool) SetTo(yes bool) {
 }
 
 // Toggle inverts the Boolean then returns the value before inverting.
+// Based on: https://github.com/uber-go/atomic/blob/3504dfaa1fa414923b1c8693f45d2f6931daf229/bool_ext.go#L40
 func (ab *AtomicBool) Toggle() bool {
-	return atomic.AddInt32((*int32)(&ab.boolean), 1)&1 == 0
+	var old bool
+	for {
+		old = ab.IsSet()
+		if ab.SetToIf(old, !old) {
+			return old
+		}
+	}
 }
 
 // SetToIf sets the Boolean to new only if the Boolean matches the old.

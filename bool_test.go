@@ -2,7 +2,6 @@ package abool
 
 import (
 	"encoding/json"
-	"math"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -110,35 +109,6 @@ func TestToogleMultipleTimes(t *testing.T) {
 	}
 }
 
-func TestToogleAfterOverflow(t *testing.T) {
-	t.Parallel()
-
-	var value int32 = math.MaxInt32
-	v := &AtomicBool{value}
-
-	valueBeforeToggle := v.boolean
-
-	// test first toggle after overflow
-	v.Toggle()
-	expected := math.MaxInt32%2 == 0
-	if v.IsSet() != expected {
-		t.Fatalf("AtomicBool.Toogle() doesn't work after overflow, expected: %v, got %v", expected, v.IsSet())
-	}
-
-	// make sure overflow happened
-	var valueAfterToggle int32 = v.boolean
-	if valueAfterToggle >= valueBeforeToggle {
-		t.Fatalf("Overflow does not happen as expected, before %d, after: %d", valueBeforeToggle, valueAfterToggle)
-	}
-
-	// test second toggle after overflow
-	v.Toggle()
-	expected = !expected
-	if v.IsSet() != expected {
-		t.Fatalf("AtomicBool.Toogle() doesn't work after the second call after overflow, expected: %v, got %v", expected, v.IsSet())
-	}
-}
-
 func TestRace(t *testing.T) {
 	repeat := 10000
 	var wg sync.WaitGroup
@@ -169,6 +139,22 @@ func TestRace(t *testing.T) {
 		}
 	}()
 	wg.Wait()
+}
+
+func TestSetToIfAfterMultipleToggles(t *testing.T) {
+	v := New() // false
+
+	v.Toggle() // true
+	v.Toggle() // false
+	v.Toggle() // true
+
+	// As v is true, it should now be flipped to false
+	v.SetToIf(true, false)
+	expected := false
+
+	if v.IsSet() != expected {
+		t.Fatalf("Toggling the value atleast 3 times, until it's true, `SetToIf(true, false)` should flip v to false, expected: %v, got %v", expected, v.IsSet())
+	}
 }
 
 func TestJSONCompatibleWithBuiltinBool(t *testing.T) {
@@ -246,6 +232,14 @@ func ExampleAtomicBool() {
 	cond.IsNotSet()        // Returns true
 	cond.SetTo(any)        // Sets to whatever you want
 	cond.SetToIf(new, old) // Sets to `new` only if the Boolean matches the `old`, returns whether succeeded
+}
+
+func BenchmarkAtomicBoolToggle(b *testing.B) {
+	v := New()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = v.Toggle()
+	}
 }
 
 // Benchmark Read
