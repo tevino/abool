@@ -53,7 +53,7 @@ BenchmarkAtomicBoolCAS-4   	100000000	        11.7 ns/op   # <--- This package
 
 ## Special thanks to contributors
 
-- [@barryz](https://github.com/barryz)
+- [barryz](https://github.com/barryz)
   - Added the `Toggle` method
-- [@LucasRouckhout](https://github.com/LucasRouckhout)
+- [Lucas Rouckhout](https://github.com/LucasRouckhout)
   - Implemented JSON Unmarshal and Marshal interface
