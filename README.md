@@ -19,7 +19,7 @@ cond.IsSet()            // Returns true
 cond.UnSet()            // Sets to false
 cond.IsNotSet()         // Returns true
 cond.SetTo(any)         // Sets to whatever you want
-cond.SetToIf(new, old)  // Sets to `new` only if the Boolean matches the `old`, returns whether succeeded
+cond.SetToIf(old, new)  // Sets to `new` only if the Boolean matches the `old`, returns whether succeeded
 
 
 // embedding
