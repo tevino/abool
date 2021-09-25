@@ -10,7 +10,7 @@ Designed for cleaner code.
 ## Usage
 
 ```go
-import "github.com/tevino/abool"
+import "github.com/tevino/abool/v2"
 
 cond := abool.New()     // default to false
 
