@@ -29,27 +29,30 @@ type Foo struct {
 }
 ```
 
-## Benchmark:
-
-- Go 1.6.2
-- OS X 10.11.4
-- Intel CPU (to be specified)
-
+## Benchmark
 
 ```
+go: v1.18.2
+goos: darwin
+goarch: amd64
+cpu: Intel(R) Core(TM) i9-8950HK CPU @ 2.90GHz
+
 # Read
-BenchmarkMutexRead-4       	100000000	        21.0 ns/op
-BenchmarkAtomicValueRead-4 	200000000	         6.30 ns/op
-BenchmarkAtomicBoolRead-4  	300000000	         4.21 ns/op  # <--- This package
+BenchmarkMutexRead-12           	100000000	          10.24   ns/op
+BenchmarkAtomicValueRead-12     	1000000000	         0.4690 ns/op
+BenchmarkAtomicBoolRead-12      	1000000000	         0.2345 ns/op  # <--- This package
 
 # Write
-BenchmarkMutexWrite-4      	100000000	        21.6 ns/op
-BenchmarkAtomicValueWrite-4	 30000000	        43.4 ns/op
-BenchmarkAtomicBoolWrite-4 	200000000	         9.87 ns/op  # <--- This package
+BenchmarkMutexWrite-12          	100000000	        10.19  ns/op
+BenchmarkAtomicValueWrite-12    	164918696	         7.235 ns/op
+BenchmarkAtomicBoolWrite-12     	278729533	         4.341 ns/op  # <--- This package
 
 # CAS
-BenchmarkMutexCAS-4        	 30000000	        44.9 ns/op
-BenchmarkAtomicBoolCAS-4   	100000000	        11.7 ns/op   # <--- This package
+BenchmarkMutexCAS-12            	57333123	        20.26  ns/op
+BenchmarkAtomicBoolCAS-12       	203575494	         5.755 ns/op  # <--- This package
+
+# Toggle
+BenchmarkAtomicBoolToggle-12    	145249862	         8.196 ns/op  # <--- This package
 ```
 
 ## Special thanks to contributors
