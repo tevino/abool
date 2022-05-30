@@ -20,6 +20,7 @@ cond.UnSet()            // Sets to false
 cond.IsNotSet()         // Returns true
 cond.SetTo(any)         // Sets to whatever you want
 cond.SetToIf(old, new)  // Sets to `new` only if the Boolean matches the `old`, returns whether succeeded
+cond.Toggle()           // Flip the value of `cond`, returns the value before flipping
 
 
 // embedding
@@ -59,4 +60,4 @@ BenchmarkAtomicBoolCAS-4   	100000000	        11.7 ns/op   # <--- This package
   - Implemented JSON Unmarshal and Marshal interface
 - [Sebastian Schicho](https://github.com/schicho)
   - Reported a regression with test case
-
+  - Reintroduced the `Toggle` method
