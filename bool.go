@@ -24,21 +24,23 @@ func NewBool(ok bool) *AtomicBool {
 // AtomicBool is an atomic Boolean.
 // Its methods are all atomic, thus safe to be called by multiple goroutines simultaneously.
 // Note: When embedding into a struct one should always use *AtomicBool to avoid copy.
-type AtomicBool int32
+type AtomicBool struct {
+	boolean int32
+}
 
 // Set sets the Boolean to true.
 func (ab *AtomicBool) Set() {
-	atomic.StoreInt32((*int32)(ab), 1)
+	atomic.StoreInt32(&ab.boolean, 1)
 }
 
 // UnSet sets the Boolean to false.
 func (ab *AtomicBool) UnSet() {
-	atomic.StoreInt32((*int32)(ab), 0)
+	atomic.StoreInt32(&ab.boolean, 0)
 }
 
 // IsSet returns whether the Boolean is true.
 func (ab *AtomicBool) IsSet() bool {
-	return atomic.LoadInt32((*int32)(ab)) == 1
+	return atomic.LoadInt32(&ab.boolean)&1 == 1
 }
 
 // IsNotSet returns whether the Boolean is false.
@@ -49,9 +51,21 @@ func (ab *AtomicBool) IsNotSet() bool {
 // SetTo sets the boolean with given Boolean.
 func (ab *AtomicBool) SetTo(yes bool) {
 	if yes {
-		atomic.StoreInt32((*int32)(ab), 1)
+		atomic.StoreInt32(&ab.boolean, 1)
 	} else {
-		atomic.StoreInt32((*int32)(ab), 0)
+		atomic.StoreInt32(&ab.boolean, 0)
+	}
+}
+
+// Toggle inverts the Boolean then returns the value before inverting.
+// Based on: https://github.com/uber-go/atomic/blob/3504dfaa1fa414923b1c8693f45d2f6931daf229/bool_ext.go#L40
+func (ab *AtomicBool) Toggle() bool {
+	var old bool
+	for {
+		old = ab.IsSet()
+		if ab.SetToIf(old, !old) {
+			return old
+		}
 	}
 }
 
@@ -65,7 +79,7 @@ func (ab *AtomicBool) SetToIf(old, new bool) (set bool) {
 	if new {
 		n = 1
 	}
-	return atomic.CompareAndSwapInt32((*int32)(ab), o, n)
+	return atomic.CompareAndSwapInt32(&ab.boolean, o, n)
 }
 
 // MarshalJSON behaves the same as if the AtomicBool is a builtin.bool.
