@@ -63,4 +63,5 @@ BenchmarkAtomicBoolToggle-12    	145249862	         8.196 ns/op  # <--- This pac
   - Implemented JSON Unmarshal and Marshal interface
 - [Sebastian Schicho](https://github.com/schicho)
   - Reported a regression with test case
+  - Hide the underlying `int`
   - Reintroduced the `Toggle` method
