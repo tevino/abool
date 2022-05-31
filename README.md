@@ -38,7 +38,7 @@ goarch: amd64
 cpu: Intel(R) Core(TM) i9-8950HK CPU @ 2.90GHz
 
 # Read
-BenchmarkMutexRead-12           	100000000	          10.24   ns/op
+BenchmarkMutexRead-12           	100000000	        10.24   ns/op
 BenchmarkAtomicValueRead-12     	1000000000	         0.4690 ns/op
 BenchmarkAtomicBoolRead-12      	1000000000	         0.2345 ns/op  # <--- This package
 
